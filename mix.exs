@@ -28,7 +28,6 @@ defmodule Myelin.MixProject do
     [
       {:neuron, "~> 0.7.0"},
       {:ed25519, "~> 1.3"},
-      {:keccakf1600, "~> 2.0.0", hex: :keccakf1600_orig}
     ]
   end
 end
