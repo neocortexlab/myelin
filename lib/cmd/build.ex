@@ -24,16 +24,21 @@ defmodule Cmd.Build do
 
   defp build(agent_file) do
     print "Building agent from #{agent_file}"
-    # TODO: fetch real agent address
-    address = "TODO"
+
+    agent_file
+    |> read_agent()
+    |> compile()
+    |> Crypto.to_hex()
+    |> IO.inspect(label: :compiled)
+  end
+
+  defp read_agent(agent_file) do
     @agents_dir
     |> Path.join(agent_file)
     |> File.read!()
-    |> gen_code()
-    |> compile(address)
   end
 
-  defp gen_code(agent_code) do
+  defp compile(agent_code) do
     """
     defmodule Agents do
       import Myelin.Agent
@@ -41,14 +46,12 @@ defmodule Cmd.Build do
       #{agent_code}
     end
     """
+    |> Code.compile_string()
+    |> Keyword.delete(Agents)
+    |> fetch_agent_code()
   end
 
-  defp compile(code, address) do
-    code
-    |> Code.compile_string()
-    |> Keyword.get(String.to_atom("Elixir." <> address))
-    |> Crypto.to_hex()
-  end
+  defp fetch_agent_code([{_module, code}]), do: code
 
   defp print(msg), do: IO.puts(msg)
 end
