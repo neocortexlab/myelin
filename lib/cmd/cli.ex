@@ -8,9 +8,10 @@ defmodule Cmd.CLI do
   myelin help           - this help message
   """
 
-  alias Cmd.New
+  alias Cmd.{Build, New}
 
   def main(["new" | rest]), do: New.run(rest)
+  def main(["build" | rest]), do: Build.run(rest)
 
   def main(_) do
     IO.puts @moduledoc
