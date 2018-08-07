@@ -12,7 +12,8 @@ defmodule Myelin.MixProject do
       package: [
         maintainers: ["Anton Zhuravlev <anton@pallium.network>"],
         links: %{"GitHub" => "https://github.com/neocortexlab/myelin"}
-      ]
+      ],
+      escript: [main_module: Cmd.CLI]
     ]
   end
 

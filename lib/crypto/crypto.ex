@@ -6,7 +6,7 @@ defmodule Crypto do
   def hash(data), do: :crypto.hash(:sha256, data)
 
   def gen_key_pair() do
-    {secret_key, public_key} = Ed25519.generate_key_pair()
+    {_secret_key, _public_key} = Ed25519.generate_key_pair()
   end
 
   def gen_address(public_key), do: public_key |> hash()
