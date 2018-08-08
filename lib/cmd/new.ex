@@ -24,7 +24,7 @@ defmodule Cmd.New do
   defp generate_app(path) do
     name = Path.basename(path)
     {public_key, _private_key} = Crypto.gen_key_pair()
-    address = Crypto.gen_address(public_key) |> Base.encode16(case: :lower)
+    address = Crypto.gen_address(public_key) |> Crypto.to_hex()
 
     File.mkdir_p!(path)
     File.cp_r!(@app_template_path, path)

@@ -33,9 +33,13 @@ defmodule Myelin do
     {secret_key, public_key} = Ed25519.generate_key_pair()
     address = Crypto.gen_address(public_key) |> Crypto.to_hex()
     code = Examples.Agents.get_agent("simple", address) |> Crypto.to_hex()
+    deploy_agent(address, code)
+  end
+
+  def deploy_agent(address, code) do
     rlp = new_agent(code)
 
-    Neuron.mutation("""
+    """
       CreateTx {
         sendTx(to: "#{address}",
              from: "",
@@ -46,6 +50,8 @@ defmodule Myelin do
           rlp
         }
       }
-    """)
+    """
+    |> Neuron.mutation()
   end
+
 end

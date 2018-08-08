@@ -5,15 +5,32 @@ defmodule Cmd.CLI do
   ## Commands:
 
   myelin new AGENT_NAME - creates new agent
+  myelin build          - builds agents
+  myelin deploy         - deploys agents
+  myelin send_msg MSG   - sends message
   myelin help           - this help message
   """
 
-  alias Cmd.{Build, New}
+  import Cmd.Utils
 
-  def main(["new" | rest]), do: New.run(rest)
-  def main(["build" | rest]), do: Build.run(rest)
+  def main(["help" | _]), do: print @moduledoc
+  def main([]), do: print @moduledoc
 
-  def main(_) do
-    IO.puts @moduledoc
+  def main([cmd | rest]) do
+    case cmd_module(cmd) do
+      nil -> 
+        print "Unknown command #{inspect cmd}. Run `myelin help` for help"
+      module ->
+        apply(module, :run, [rest])
+    end
+  end
+
+  def cmd_module(cmd) do
+    module = String.to_atom("Elixir.Cmd.#{Macro.camelize(cmd)}")
+    Code.ensure_loaded(module)
+    case function_exported?(module, :run, 1) do
+      true -> module
+      false -> nil
+    end
   end
 end
