@@ -55,16 +55,29 @@ defmodule Cmd.Build do
   end
 
   defp compile(agent_src) do
-    """
-    defmodule Agents do
-      import Myelin.Agent
+    compiled =
+      """
+        defmodule Agents do
+          import Myelin.Agent
 
-      #{agent_src}
-    end
-    """
-    |> Code.compile_string()
+          #{agent_src}
+        end
+      """
+      |> Code.compile_string()
+
+    purge_modules(Keyword.keys(compiled))
+
+    compiled
     |> Keyword.delete(Agents)
     |> fetch_agent_code()
+  end
+
+  # TODO: ensure this is really required
+  defp purge_modules([]), do: :ok
+  defp purge_modules([mod | rest]) do
+    :code.purge(mod)
+    :code.delete(mod)
+    purge_modules(rest)
   end
 
   defp fetch_agent_code([{_module, code}]), do: code
