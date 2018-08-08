@@ -25,11 +25,16 @@ defmodule Cmd.Build do
   defp build(agent_file) do
     print "Building agent from #{agent_file}"
 
+    code = compile_file(agent_file)
+    File.mkdir_p!("build")
+    File.write!(Path.join("build", agent_file), code)
+  end
+
+  def compile_file(agent_file) do
     agent_file
     |> read_agent()
     |> compile()
     |> Crypto.to_hex()
-    |> IO.inspect(label: :compiled)
   end
 
   defp read_agent(agent_file) do
