@@ -40,13 +40,10 @@ defmodule Myelin do
     rlp = new_agent(code)
 
     """
-      CreateTx {
-        sendTx(to: "#{address}",
-             from: "",
-             value: 0
-             type: "create",
-             data: "#{rlp}"
-             ) {
+      CreateAgent {
+        create(address: "#{address}",
+              agent: "#{rlp}"",
+            ) {
           rlp
         }
       }
