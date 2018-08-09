@@ -1,21 +1,24 @@
 # Myelin
 
-**TODO: Add description**
-
 ## Installation
 
-If [available in Hex](https://hex.pm/docs/publish), the package can be installed
-by adding `myelin` to your list of dependencies in `mix.exs`:
+### Installation from pre-built release
 
-```elixir
-def deps do
-  [
-    {:myelin, "~> 0.1.0"}
-  ]
-end
-```
+Download latest release from https://raw.githubusercontent.com/neocortexlab/myelin/master/releases/myelin and put it in your PATH.
+Set permission for executing.
 
-Documentation can be generated with [ExDoc](https://github.com/elixir-lang/ex_doc)
-and published on [HexDocs](https://hexdocs.pm). Once published, the docs can
-be found at [https://hexdocs.pm/myelin](https://hexdocs.pm/myelin).
+    MYELIN=/usr/local/bin/myelin
+    curl https://raw.githubusercontent.com/neocortexlab/myelin/master/releases/myelin -o $MYELIN
+    chmod a+rx $MYELIN
+  
+### Installation from source
+
+Clone the myelin repository, cd into it and run `make install`.
+
+## Usage
+
+Run `myelin help` for list of commands.
+
+
+ 
 
