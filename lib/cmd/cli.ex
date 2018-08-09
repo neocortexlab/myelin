@@ -4,11 +4,11 @@ defmodule Cmd.CLI do
 
   ## Commands:
 
-  myelin new AGENT_NAME - creates new agent
-  myelin build          - builds agents
-  myelin deploy         - deploys agents
-  myelin send_msg MSG   - sends message
-  myelin help           - this help message
+  myelin new AGENT_NAME             - creates new agent
+  myelin build                      - builds agents
+  myelin deploy                     - deploys agents
+  myelin send AGENT ACTION PARAMS   - sends message
+  myelin help                       - this help message
   """
 
   import Cmd.Utils

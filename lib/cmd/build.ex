@@ -6,8 +6,6 @@ defmodule Cmd.Build do
       myelin build
   """
 
-  @address_regex ~r/^agent "([^"]+)"/
-
   import Cmd.Utils
 
   def run([]), do: build_all()
@@ -20,38 +18,28 @@ defmodule Cmd.Build do
         print "Run this command from the myelin project folder"
 
       {:ok, agent_files} ->
-        for agent_file <- agent_files, do: build(agent_file)
+        for agent_file <- agent_files do
+          agent_file
+          |> Path.basename(".ex")
+          |> build()
+        end
     end
   end
 
-  defp build(agent_file) do
-    agent_src = read_agent_src(agent_file)
-    address = get_address(agent_src)
+  defp build(agent_name) do
+    {:ok, agent_src} = read_agent_source(agent_name)
+    {:ok, address} = get_address(agent_name)
     code = compile_agent(agent_src)
     content = Enum.join([address, code], "\n")
-    compiled_filename = Path.basename(agent_file, ".ex")
     File.mkdir_p!(build_path())
-    File.write!(Path.join("build", compiled_filename), content)
-    print "Building agent #{inspect compiled_filename} successfully completed"
-  end
-
-  defp get_address(src) do
-    case Regex.run(@address_regex, src) do
-      [_, address] -> address
-      _ -> raise "Address not found in agent code"
-    end
+    File.write!(Path.join(build_path(), agent_name), content)
+    print "Building agent #{agent_name} successfully completed"
   end
 
   defp compile_agent(src) do
     src
     |> compile()
     |> Crypto.to_hex()
-  end
-
-  defp read_agent_src(agent_file) do
-    agents_path()
-    |> Path.join(agent_file)
-    |> File.read!()
   end
 
   defp compile(agent_src) do
