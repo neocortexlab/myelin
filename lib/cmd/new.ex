@@ -6,7 +6,8 @@ defmodule Cmd.New do
       myelin new PATH
   """
 
-  @app_template_path Path.join(:code.priv_dir(:myelin), "app_template")
+  @templates_path Path.join(:code.priv_dir(:myelin), "templates")
+  @create_dirs ~w(agents models tests storage)
 
   def run([path]) do
     case File.exists?(path) do
@@ -27,17 +28,17 @@ defmodule Cmd.New do
     address = Crypto.gen_address(public_key) |> Crypto.to_hex()
 
     File.mkdir_p!(path)
-    File.cp_r!(@app_template_path, path)
+    for dir <- @create_dirs, do: Path.join(path, dir) |> File.mkdir!
 
-    agent_path = Path.join(path, "agents/#{name}.ex")
-    agent_template_path = Path.join(path, "agents/agent.ex")
-    agent_code =
-      agent_template_path
-      |> File.read!()
-      |> String.replace("{{address}}", address)
+    File.write!(Path.join([path, "agents", "#{name}.ex"]), agent_code(address))
 
-    File.rm!(agent_template_path)
-    File.write!(agent_path, agent_code)
+    File.touch!(Path.join(path, "myelin.ex"))
+  end
+
+  defp agent_code(address) do
+    Path.join(@templates_path, "agent.ex")
+    |> File.read!()
+    |> String.replace("{{address}}", address)
   end
 end
 
