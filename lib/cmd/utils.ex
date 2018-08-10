@@ -1,5 +1,5 @@
 defmodule Cmd.Utils do
-  @address_regex ~r/^agent "([^"]+)"/
+  alias Crypto.Storage
 
   def print(message), do: IO.puts(message)
 
@@ -20,15 +20,7 @@ defmodule Cmd.Utils do
   end
 
   def get_address(agent_name) do
-    case read_agent_source(agent_name) do
-      {:ok, agent_src} ->
-        case Regex.run(@address_regex, agent_src) do
-          [_, address] -> {:ok, address}
-          _ -> {:error, "No address in agent source"}
-        end
-      {:error, reason} ->
-        {:error, reason}
-    end
+    Storage.get_address(agent_name)
   end
 
   def read_agent_source(agent_name) do
