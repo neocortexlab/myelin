@@ -13,7 +13,7 @@ Set permission for executing.
   
 ### Installation from source
 
-Clone the myelin repository, cd into it and run `make install`.
+Clone the myelin repository, cd into it and run `make build`.
 
 ## Usage
 
