@@ -39,16 +39,19 @@ defmodule Myelin do
   def deploy_agent(address, code) do
     rlp = new_agent(code)
 
-    """
+    {:ok, response} = """
       CreateAgent {
         create(address: "#{address}",
-              agent: "#{rlp}"",
+              agent: "#{rlp}"
             ) {
-          rlp
+          hash
+          height
+          data
         }
       }
     """
     |> Neuron.mutation()
+    response.body["data"]["create"]
   end
 
   def send_msg(to, action, props) do

@@ -29,9 +29,11 @@ defmodule Cmd.Deploy do
     [address, code] = load(file)
 
     Myelin.init()
-    Myelin.deploy_agent(address, code)
+    response = Myelin.deploy_agent(address, code)
 
     print "The #{file} Agent was successfully deployed at #{address}"
+    print "Transaction: #{inspect response}"
+    print "Decoded data: #{inspect Base.decode64(response["data"])}"
   end
 
   defp load(file) do
