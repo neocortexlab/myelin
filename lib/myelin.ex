@@ -55,12 +55,14 @@ defmodule Myelin do
   end
 
   def send_msg(to, action, props) do
-    rlp = new_message(action, props)
+    rlp_hex = new_message(action, props)
     {:ok, response} =
       """
         SendMessage {
-          sendMsg(from: "", to: "#{to}", message: "#{rlp}") {
-            rlp
+          sendMsg(to: "#{to}", message: "#{rlp_hex}") {
+            hash
+            height
+            data
           }
         }
       """
