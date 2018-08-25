@@ -7,7 +7,7 @@ defmodule Cmd.New do
   """
 
   @templates_path Path.join(:code.priv_dir(:myelin), "templates")
-  @create_dirs ~w(agents models tests storage)
+  @create_dirs ~w(agents models tests storage scripts tasks)
 
   alias Crypto.Storage
 
@@ -43,4 +43,3 @@ defmodule Cmd.New do
     |> String.replace("{{address}}", address)
   end
 end
-

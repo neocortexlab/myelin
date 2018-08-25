@@ -8,6 +8,7 @@ defmodule Cmd.CLI do
   myelin build                      - builds agents
   myelin deploy                     - deploys agents
   myelin send AGENT ACTION PARAMS   - sends message
+  myelin task NAME                  - runs tasks
   myelin help                       - this help message
   """
 
@@ -18,7 +19,7 @@ defmodule Cmd.CLI do
 
   def main([cmd | rest]) do
     case cmd_module(cmd) do
-      nil -> 
+      nil ->
         print "Unknown command #{inspect cmd}. Run `myelin help` for help"
       module ->
         apply(module, :run, [rest])

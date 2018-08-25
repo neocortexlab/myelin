@@ -5,6 +5,7 @@ defmodule Cmd.Utils do
 
   def build_path, do: "build"
   def agents_path, do: "agents"
+  def tasks_path, do: "tasks"
 
   def resolve_address(str) do
     case is_address?(str) do
@@ -29,4 +30,3 @@ defmodule Cmd.Utils do
     |> File.read()
   end
 end
-

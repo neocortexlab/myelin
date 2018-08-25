@@ -29,6 +29,7 @@ defmodule Myelin.MixProject do
     [
       {:neuron, "~> 0.7.0"},
       {:ed25519, "~> 1.3"},
+      {:export, "~> 0.1.0"}
     ]
   end
 end

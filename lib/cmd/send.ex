@@ -3,7 +3,7 @@ defmodule Cmd.Send do
   Sends message to agent
 
   ## Usage:
-      myellin send AGENT ACTION PROPS
+      myelin send AGENT ACTION PROPS
   """
 
   import Cmd.Utils
