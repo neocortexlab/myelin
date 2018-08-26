@@ -29,7 +29,9 @@ defmodule Myelin.MixProject do
     [
       {:neuron, "~> 0.7.0"},
       {:ed25519, "~> 1.3"},
-      {:export, "~> 0.1.0"}
+      {:optimus, "~> 0.1.8"},
+      {:thrift, github: "pinterest/elixir-thrift"}
+      #{:riffed, github: "pinterest/riffed"},
     ]
   end
 end
