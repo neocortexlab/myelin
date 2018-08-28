@@ -1,6 +1,6 @@
-defmodule Cmd.Build do
+defmodule Myelin.Cmd.Build do
   @moduledoc """
-  Builds Myelin agents.
+  Builds Agents
 
   ## Usage:
       myelin build
@@ -8,9 +8,7 @@ defmodule Cmd.Build do
 
   import Cmd.Utils
 
-  def run([]), do: build_all()
-
-  def run(_), do: IO.puts(@moduledoc)
+  def process(_args, _flags), do: build_all()
 
   defp build_all do
     case File.ls(agents_path()) do

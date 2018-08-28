@@ -1,4 +1,4 @@
-defmodule Cmd.Deploy do
+defmodule Myelin.Cmd.Deploy do
   @moduledoc """
   Deploys agent
 
@@ -8,9 +8,7 @@ defmodule Cmd.Deploy do
 
   import Cmd.Utils
 
-  def run([]), do: deploy_all()
-
-  def run(_), do: IO.puts(@moduledoc)
+  def process(_args, _flags), do: deploy_all()
 
   defp deploy_all do
     case File.ls(build_path()) do

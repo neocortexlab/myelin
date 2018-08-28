@@ -4,7 +4,7 @@ defmodule Myelin.MixProject do
   def project do
     [
       app: :myelin,
-      version: "0.1.0",
+      version: "0.1.1",
       elixir: "~> 1.7",
       description: "The Pallium Network development framework",
       start_permanent: Mix.env() == :prod,
@@ -13,7 +13,7 @@ defmodule Myelin.MixProject do
         maintainers: ["Anton Zhuravlev <anton@pallium.network>"],
         links: %{"GitHub" => "https://github.com/neocortexlab/myelin"}
       ],
-      escript: [main_module: Cmd.CLI]
+      escript: [main_module: Myelin.CmdSpec]
     ]
   end
 
@@ -31,7 +31,6 @@ defmodule Myelin.MixProject do
       {:ed25519, "~> 1.3"},
       {:optimus, "~> 0.1.8"},
       {:thrift, github: "pinterest/elixir-thrift"}
-      #{:riffed, github: "pinterest/riffed"},
     ]
   end
 end
