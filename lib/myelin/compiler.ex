@@ -29,7 +29,6 @@ defmodule Myelin.Compiler do
     |> cleanup()
     |> Keyword.delete(Agents)
     |> fetch_agent_code()
-    |> Crypto.to_hex()
   end
 
   defp cleanup(compiled) do

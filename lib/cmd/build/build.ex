@@ -30,10 +30,14 @@ defmodule Myelin.Cmd.Build do
     with {:ok, address} <- get_address(agent_name),
          {:ok, code} <- Compiler.compile_file(agent_name)
     do
-      content = Enum.join([address, code], "\n")
+      code_hex = Crypto.to_hex(code)
+      content = Enum.join([address, code_hex], "\n")
       File.mkdir_p!(build_path())
       File.write!(Path.join(build_path(), agent_name), content)
       print "Building agent #{agent_name} successfully completed"
+    else
+      {:error, reason} ->
+        print "Error while building agent: #{inspect reason}"
     end
   end
 end
