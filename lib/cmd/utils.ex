@@ -29,4 +29,8 @@ defmodule Cmd.Utils do
     |> Path.join(agent_name <> ".ex")
     |> File.read()
   end
+
+  def insert_address(src, address) do
+    String.replace(src, "{{address}}", address)
+  end
 end
