@@ -10,7 +10,10 @@ defmodule Myelin.MixProject do
       start_permanent: Mix.env() == :prod,
       deps: deps(),
       package: [
-        maintainers: ["Anton Zhuravlev <anton@pallium.network>"],
+        maintainers: [
+          "Anton Zhuravlev <anton@pallium.network>",
+          "Dmitry Zhelnin <dmitry.zhelnin@gmail.com>",
+        ],
         links: %{"GitHub" => "https://github.com/neocortexlab/myelin"}
       ],
       escript: [main_module: Myelin.CmdSpec]
