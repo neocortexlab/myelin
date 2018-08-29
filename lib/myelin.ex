@@ -68,8 +68,11 @@ defmodule Myelin do
       """
       |> Neuron.mutation()
     response.body["data"]["sendMsg"]["data"]
-    |> Base.decode64()
+    |> decode()
   end
+
+  defp decode(nil), do: nil
+  defp decode(val), do: Base.decode64(val)
 
   defp new_message(action, props) do
     {:ok, response} =

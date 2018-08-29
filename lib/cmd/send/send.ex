@@ -1,4 +1,4 @@
-defmodule Cmd.Send do
+defmodule Myelin.Cmd.Send do
   @moduledoc """
   Sends message to agent
 
@@ -14,7 +14,7 @@ defmodule Cmd.Send do
     {:ok, address} = resolve_address(args.name)
 
     Myelin.init()
-    response = Myelin.send_msg(address, args.action, Enum.join(args.props, " "))
+    response = Myelin.send_msg(address, args.action, args.props)
     print "Response: #{inspect response}"
   end
 end
