@@ -8,7 +8,8 @@ config :myelin, submodule_specs: %{
                                     :agent  => Myelin.Cmd.Agent,
                                     :task   => Myelin.Cmd.Task,
                                     :delpoy => Myelin.Cmd.Deploy,
-                                    :send   => Myelin.Cmd.Send
+                                    :send   => Myelin.Cmd.Send,
+                                    :tx     => Myelin.Cmd.Tx,
                                   }
 
 config :neuron, :neuron_connection_opts, recv_timeout: 10_000

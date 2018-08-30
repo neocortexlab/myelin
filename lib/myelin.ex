@@ -87,4 +87,19 @@ defmodule Myelin do
     response.body["data"]["newMessage"]["rlp"]
   end
 
+  def check_tx(hash) do
+    {:ok, response} =
+      """
+        CheckTx {
+          checkTx(hash: "#{hash}") {
+            hash
+            height
+            data
+
+          }
+        }
+      """
+      |> Neuron.mutation()
+    response.body["data"]["checkTx"]
+  end
 end
