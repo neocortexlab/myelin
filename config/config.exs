@@ -2,16 +2,6 @@
 # and its dependencies with the aid of the Mix.Config module.
 use Mix.Config
 
-config :myelin, submodule_specs: %{
-                                    :new    => Myelin.Cmd.New,
-                                    :build  => Myelin.Cmd.Build,
-                                    :agent  => Myelin.Cmd.Agent,
-                                    :task   => Myelin.Cmd.Task,
-                                    :delpoy => Myelin.Cmd.Deploy,
-                                    :send   => Myelin.Cmd.Send,
-                                    :tx     => Myelin.Cmd.Tx,
-                                  }
-
 config :neuron, :neuron_connection_opts, recv_timeout: 10_000
 
 # This configuration is loaded before any dependency and is restricted

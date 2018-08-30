@@ -12,7 +12,15 @@ defmodule Myelin.CmdSpec do
   myelin help                       - this help message
   """
   #import Cmd.Utils
-  @submodule_specs Application.get_env(:myelin, :submodule_specs)
+  @submodule_specs %{
+    :new    => Myelin.Cmd.New,
+    :build  => Myelin.Cmd.Build,
+    :agent  => Myelin.Cmd.Agent,
+    :task   => Myelin.Cmd.Task,
+    :delpoy => Myelin.Cmd.Deploy,
+    :send   => Myelin.Cmd.Send,
+    :tx     => Myelin.Cmd.Tx,
+  }
 
   def main([]), do: parse(["--help"])
   def main(args), do: parse(args)
