@@ -137,6 +137,7 @@ defmodule Myelin do
         response.body["errors"]
         |> Enum.map(&(&1["message"]))
         |> Enum.join("\n")
+        |> IO.puts()
         exit("Request failed")
     end
   end
