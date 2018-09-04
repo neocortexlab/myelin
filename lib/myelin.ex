@@ -18,15 +18,16 @@ defmodule Myelin do
   def init(), do: Neuron.Config.set(url: "http://localhost:8080/api")
 
   def new_agent(code) do
-      {:ok, response} = Neuron.query("""
-                        {
-                          newAgent(code: "#{code}") {
-                            rlp
-                          }
-                        }
-                        """)
+    {:ok, response} =
+      Neuron.query("""
+      {
+        newAgent(code: "#{code}") {
+          rlp
+        }
+      }
+      """)
 
-      response.body["data"]["newAgent"]["rlp"]
+    response.body["data"]["newAgent"]["rlp"]
   end
 
   def create_agent() do
@@ -39,23 +40,26 @@ defmodule Myelin do
   def deploy_agent(address, code) do
     rlp = new_agent(code)
 
-    {:ok, response} = """
-      CreateAgent {
-        create(address: "#{address}",
-              agent: "#{rlp}"
-            ) {
-          hash
-          height
-          data
+    {:ok, response} =
+      """
+        CreateAgent {
+          create(address: "#{address}",
+                agent: "#{rlp}"
+              ) {
+            hash
+            height
+            data
+          }
         }
-      }
-    """
-    |> Neuron.mutation()
+      """
+      |> Neuron.mutation()
+
     response.body["data"]["create"]
   end
 
   def send_msg(to, action, props) do
     rlp_hex = new_message(action, props)
+
     {:ok, response} =
       """
         SendMessage {
@@ -67,6 +71,7 @@ defmodule Myelin do
         }
       """
       |> Neuron.mutation()
+
     response.body["data"]["sendMsg"]["data"]
     |> decode()
   end
@@ -84,6 +89,7 @@ defmodule Myelin do
       }
       """
       |> Neuron.query()
+
     response.body["data"]["newMessage"]["rlp"]
   end
 
@@ -100,6 +106,38 @@ defmodule Myelin do
         }
       """
       |> Neuron.mutation()
+
     response.body["data"]["checkTx"]
+  end
+
+  def bid(address, %{} = bid) do
+    bid_params =
+      bid
+      |> Enum.map(fn {k, v} -> ~s(#{k}: "#{v}") end)
+      |> Enum.join(", ")
+
+    response =
+      request("""
+        Bid {
+          bid(from: "#{address}", #{bid_params}) {
+            hash
+            height
+            data
+          }
+        }
+      """)
+
+    response.body
+  end
+
+  defp request(request) do
+    case Neuron.mutation(request) do
+      {:ok, response} -> response
+      {:error, response} ->
+        response.body["errors"]
+        |> Enum.map(&(&1["message"]))
+        |> Enum.join("\n")
+        exit("Request failed")
+    end
   end
 end

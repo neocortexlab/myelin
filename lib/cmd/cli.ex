@@ -20,6 +20,7 @@ defmodule Myelin.CmdSpec do
     :delpoy => Myelin.Cmd.Deploy,
     :send   => Myelin.Cmd.Send,
     :tx     => Myelin.Cmd.Tx,
+    :bid    => Myelin.Cmd.Bid,
   }
 
   def main([]), do: parse(["--help"])
