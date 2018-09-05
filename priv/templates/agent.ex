@@ -1,5 +1,5 @@
 agent "{{address}}" do
-  def construct() do
+  def construct(params) do
     :ok
   end
 

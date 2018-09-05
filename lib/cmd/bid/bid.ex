@@ -11,7 +11,7 @@ defmodule Myelin.Cmd.Bid do
   def process(args, _flags) do
     {:ok, address} = resolve_address(args.agent)
     Myelin.init()
-    response = Myelin.bid(address, bid())
+    Myelin.bid(address, bid())
     print "Ok"
   end
 

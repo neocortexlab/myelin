@@ -27,7 +27,7 @@ defmodule Myelin.Cmd.Deploy do
     [address, code] = load(file)
 
     Myelin.init()
-    response = Myelin.deploy_agent(address, code)
+    response = Myelin.deploy_agent(address, code, deploy_params())
 
     print "The #{file} Agent was successfully deployed at #{address}"
     print "Transaction: #{inspect response}"
@@ -40,4 +40,6 @@ defmodule Myelin.Cmd.Deploy do
     |> File.read!()
     |> String.split("\n", parts: 2)
   end
+
+  defp deploy_params, do: %{foo: "bar", model: "hash"}
 end

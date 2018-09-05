@@ -30,22 +30,22 @@ defmodule Myelin do
     response.body["data"]["newAgent"]["rlp"]
   end
 
+  # TODO: remove this function if not used anymore
   def create_agent() do
     {_secret_key, public_key} = Ed25519.generate_key_pair()
     address = Crypto.gen_address(public_key) |> Crypto.to_hex()
     code = Examples.Agents.get_agent("simple", address) |> Crypto.to_hex()
-    deploy_agent(address, code)
+    deploy_agent(address, code, %{})
   end
 
-  def deploy_agent(address, code) do
+  def deploy_agent(address, code, %{} = params) do
     rlp = new_agent(code)
+    encoded_params = Crypto.encode_map(params)
 
     {:ok, response} =
       """
         CreateAgent {
-          create(address: "#{address}",
-                agent: "#{rlp}"
-              ) {
+          create(address: "#{address}", agent: "#{rlp}", params: "#{encoded_params}") {
             hash
             height
             data

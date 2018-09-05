@@ -16,5 +16,10 @@ defmodule Crypto do
 
   @spec to_hex(binary()) :: String.t()
   def to_hex(bin), do: Base.encode16(bin, case: :lower)
-  
+
+  def encode_map(%{} = map) do
+    map
+    |> Enum.map(fn {k, v} -> "#{to_hex(to_string(k))}=#{to_hex(to_string(v))}" end)
+    |> Enum.join(",")
+  end
 end
