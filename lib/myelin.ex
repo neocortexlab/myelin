@@ -42,8 +42,8 @@ defmodule Myelin do
     rlp = new_agent(code)
     encoded_params = Crypto.encode_map(params)
 
-    {:ok, response} =
-      """
+    response =
+      request("""
         CreateAgent {
           create(address: "#{address}", agent: "#{rlp}", params: "#{encoded_params}") {
             hash
@@ -51,8 +51,7 @@ defmodule Myelin do
             data
           }
         }
-      """
-      |> Neuron.mutation()
+      """)
 
     response.body["data"]["create"]
   end
@@ -60,8 +59,8 @@ defmodule Myelin do
   def send_msg(to, action, props) do
     rlp_hex = new_message(action, props)
 
-    {:ok, response} =
-      """
+    response =
+      request("""
         SendMessage {
           sendMsg(to: "#{to}", message: "#{rlp_hex}") {
             hash
@@ -69,15 +68,14 @@ defmodule Myelin do
             data
           }
         }
-      """
-      |> Neuron.mutation()
+      """)
 
     response.body["data"]["sendMsg"]["data"]
     |> decode()
   end
 
   defp decode(nil), do: nil
-  defp decode(val), do: Base.decode64(val)
+  defp decode(val), do: Base.decode64!(val)
 
   defp new_message(action, props) do
     {:ok, response} =
@@ -94,8 +92,8 @@ defmodule Myelin do
   end
 
   def check_tx(hash) do
-    {:ok, response} =
-      """
+    response =
+      request("""
         CheckTx {
           checkTx(hash: "#{hash}") {
             hash
@@ -104,8 +102,7 @@ defmodule Myelin do
 
           }
         }
-      """
-      |> Neuron.mutation()
+      """)
 
     response.body["data"]["checkTx"]
   end
@@ -132,13 +129,24 @@ defmodule Myelin do
 
   defp request(request) do
     case Neuron.mutation(request) do
-      {:ok, response} -> response
+      {:ok, response} ->
+        print_errors(response)
+        response
+
       {:error, response} ->
-        response.body["errors"]
-        |> Enum.map(&(&1["message"]))
+        print_errors(response)
+        exit("Request failed")
+    end
+  end
+
+  defp print_errors(response) do
+    case response.body["errors"] do
+      nil -> :ok
+      errors ->
+        errors
+        |> Enum.map(& &1["message"])
         |> Enum.join("\n")
         |> IO.puts()
-        exit("Request failed")
     end
   end
 end

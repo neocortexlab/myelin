@@ -21,7 +21,7 @@ defmodule Myelin.Cmd.Send.CmdSpec do
             parser: :string
           ],
           props: [
-            value_name: "NAME",
+            value_name: "PROPS",
             help: "Message props",
             required: true,
             parser: :string
