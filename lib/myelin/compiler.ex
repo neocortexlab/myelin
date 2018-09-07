@@ -1,9 +1,25 @@
 defmodule Myelin.Compiler do
   alias Cmd.Utils
 
-  def compile_file(agent_name) do
+  @agent_template """
+    defmodule {{module}} do
+      import Myelin.Agent
+      alias Pallium.Env
+
+      @self "{{address}}"
+
+      def start_task(agent, task), do: Env.start_task(@self, agent, task)
+      def get_value(key), do: Env.get_value(@self, key)
+      def set_value(key, value), do: Env.set_value(@self, key, value)
+      def set_state(state), do: Env.set_state(@self, state)
+
+      {{code}}
+    end
+  """
+
+  def compile_file(agent_name, address) do
     with {:ok, src} <- Utils.read_agent_source(agent_name) do
-      {:ok, compile(src)}
+      {:ok, compile(src, address)}
     end
   end
 
@@ -12,23 +28,19 @@ defmodule Myelin.Compiler do
       code =
         tmpl
         |> Utils.insert_address(address)
-        |> compile()
+        |> compile(address)
       {:ok, code}
     end
   end
 
-  def compile(agent_source) do
-    """
-      defmodule Agents do
-        import Myelin.Agent
-
-        #{agent_source}
-      end
-    """
+  def compile(agent_source, address) do
+    @agent_template
+    |> String.replace("{{module}}", address |> String.to_atom() |> inspect())
+    |> String.replace("{{address}}", address)
+    |> String.replace("{{code}}", agent_source)
     |> Code.compile_string()
     |> cleanup()
-    |> Keyword.delete(Agents)
-    |> fetch_agent_code()
+    |> Keyword.get(String.to_atom(address))
   end
 
   defp cleanup(compiled) do
@@ -45,6 +57,4 @@ defmodule Myelin.Compiler do
     :code.delete(mod)
     purge_modules(rest)
   end
-
-  defp fetch_agent_code([{_module, code}]), do: code
 end

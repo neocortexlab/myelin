@@ -20,7 +20,7 @@ defmodule Myelin.Cmd.Build do
       {:ok, agent_files} ->
         for agent_file <- agent_files do
           agent_file
-          |> Path.basename(".ex")
+          |> Path.basename(".agent")
           |> build()
         end
     end
@@ -28,7 +28,7 @@ defmodule Myelin.Cmd.Build do
 
   def build(agent_name) do
     with {:ok, address} <- get_address(agent_name),
-         {:ok, code} <- Compiler.compile_file(agent_name)
+         {:ok, code} <- Compiler.compile_file(agent_name, address)
     do
       code_hex = Crypto.to_hex(code)
       content = Enum.join([address, code_hex], "\n")

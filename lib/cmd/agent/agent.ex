@@ -6,7 +6,19 @@ defmodule Myelin.Cmd.Agent do
   import Cmd.Utils
   alias Crypto.Storage
 
-  @templates_path Path.join(:code.priv_dir(:myelin), "templates")
+  @template """
+  construct _params do
+    :ok
+  end
+
+  action :run, params do
+    params
+  end
+
+  task :learn, params do
+    params
+  end
+  """
 
   def process(args, flags) do
     cond do
@@ -21,7 +33,7 @@ defmodule Myelin.Cmd.Agent do
     address = Crypto.gen_address(pub_key) |> Crypto.to_hex()
     Storage.save_keys(name, address, priv_key, pub_key)
 
-    File.write!(Path.join("agents", "#{name}.ex"), agent_code(address))
+    File.write!(Path.join("agents", "#{name}.agent"), agent_code(name))
     print "Agent #{name} was created"
   end
 
@@ -29,9 +41,8 @@ defmodule Myelin.Cmd.Agent do
     print "info"
   end
 
-  defp agent_code(address) do
-    Path.join(@templates_path, "agent.ex")
-    |> File.read!()
-    |> String.replace("{{address}}", address)
+  defp agent_code(name) do
+    @template
+    |> String.replace("{{name}}", name)
   end
 end

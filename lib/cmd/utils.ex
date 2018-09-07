@@ -26,7 +26,7 @@ defmodule Cmd.Utils do
 
   def read_agent_source(agent_name) do
     agents_path()
-    |> Path.join(agent_name <> ".ex")
+    |> Path.join(agent_name <> ".agent")
     |> File.read()
   end
 

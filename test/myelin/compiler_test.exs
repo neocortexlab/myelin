@@ -4,9 +4,12 @@ defmodule Myelin.CompilerTest do
   alias Myelin.Compiler
 
   test "compiles" do
-    {:ok, code} = Compiler.compile_file("test")
-    {:module, agent} = :code.load_binary(Abc, 'nofile', code)
+    address = "abcdef"
+    {:ok, code} = Compiler.compile_file("test", address)
+    {:module, agent} = :code.load_binary(String.to_atom(address), 'nofile', code)
 
     assert agent.construct(1) == :ok
+    assert agent.action("run", 33) == 66
+    assert agent.task("learn", 3) == 9
   end
 end

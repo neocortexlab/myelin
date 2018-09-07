@@ -1,19 +1,23 @@
 defmodule Myelin.Agent do
-  defmacro agent(address, do: block) do
+  defmacro construct(params, do: block) do
     quote do
-      defmodule unquote(String.to_atom("Elixir." <> address)) do
-        alias Pallium.Env
+      def construct(unquote(params)) do
+        unquote(block)
+      end
+    end
+  end
 
-        @self unquote(address)
+  defmacro action(name, params, do: block) do
+    quote do
+      def action(unquote(to_string(name)), unquote(params)) do
+        unquote(block)
+      end
+    end
+  end
 
-        defp start_process(fun), do: Env.start_process(@self, fun)
-
-        defp get_value(key), do: Env.get_value(@self, key)
-
-        defp set_value(key, value), do: Env.set_value(@self, key, value)
-
-        defp set_state(state), do: Env.set_state(@self, state)
-
+  defmacro task(name, params, do: block) do
+    quote do
+      def task(unquote(to_string(name)), unquote(params)) do
         unquote(block)
       end
     end
