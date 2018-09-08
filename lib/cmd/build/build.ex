@@ -8,7 +8,8 @@ defmodule Myelin.Cmd.Build do
 
   import Cmd.Utils
 
-  alias Myelin.Compiler
+  alias PalliumCore.Compiler
+  alias PalliumCore.Crypto
 
   def process(_args, _flags), do: build_all()
 

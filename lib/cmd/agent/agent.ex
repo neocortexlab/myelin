@@ -5,6 +5,7 @@ defmodule Myelin.Cmd.Agent do
 
   import Cmd.Utils
   alias Crypto.Storage
+  alias PalliumCore.Crypto
 
   @template :myelin
             |> :code.priv_dir()

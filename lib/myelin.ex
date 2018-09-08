@@ -3,43 +3,13 @@ defmodule Myelin do
   Documentation for Myelin.
   """
 
-  # def connect do
-  #   Neuron.Config.set(url: "http://localhost:8080/api")
-  #   Neuron.query("""
-  #   {
-  #     agent(address: "2") {
-  #       address
-  #       balance
-  #     }
-  #   }
-  #   """)
-  # end
+  alias PalliumCore.Core.{Agent,Bid,Message}
+  alias PalliumCore.Crypto
 
   def init(), do: Neuron.Config.set(url: "http://localhost:8080/api")
 
-  def new_agent(code) do
-    {:ok, response} =
-      Neuron.query("""
-      {
-        newAgent(code: "#{code}") {
-          rlp
-        }
-      }
-      """)
-
-    response.body["data"]["newAgent"]["rlp"]
-  end
-
-  # TODO: remove this function if not used anymore
-  def create_agent() do
-    {_secret_key, public_key} = Ed25519.generate_key_pair()
-    address = Crypto.gen_address(public_key) |> Crypto.to_hex()
-    code = Examples.Agents.get_agent("simple", address) |> Crypto.to_hex()
-    deploy_agent(address, code, %{})
-  end
-
   def deploy_agent(address, code, %{} = params) do
-    rlp = new_agent(code)
+    rlp = %Agent{code: code} |> Agent.encode(:hex)
     encoded_params = Crypto.encode_map(params)
 
     response =
@@ -57,7 +27,7 @@ defmodule Myelin do
   end
 
   def send_msg(to, action, props) do
-    rlp_hex = new_message(action, props)
+    rlp_hex = %Message{action: action, props: props} |> Message.encode(:hex)
 
     response =
       request("""
@@ -77,20 +47,6 @@ defmodule Myelin do
   defp decode(nil), do: nil
   defp decode(val), do: Base.decode64!(val)
 
-  defp new_message(action, props) do
-    {:ok, response} =
-      """
-      {
-        newMessage(action:"#{action}", props:"#{props}") {
-          rlp
-        }
-      }
-      """
-      |> Neuron.query()
-
-    response.body["data"]["newMessage"]["rlp"]
-  end
-
   def check_tx(hash) do
     response =
       request("""
@@ -107,16 +63,13 @@ defmodule Myelin do
     response.body["data"]["checkTx"]
   end
 
-  def bid(address, %{} = bid) do
-    bid_params =
-      bid
-      |> Enum.map(fn {k, v} -> ~s(#{k}: "#{v}") end)
-      |> Enum.join(", ")
+  def bid(address, %Bid{} = bid) do
+    bid_rlp = bid |> Bid.encode(:hex)
 
     response =
       request("""
         Bid {
-          bid(from: "#{address}", #{bid_params}) {
+          bid(from: "#{address}", bid: #{bid_rlp}) {
             hash
             height
             data

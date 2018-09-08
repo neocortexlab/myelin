@@ -3,6 +3,8 @@ defmodule Crypto.Storage do
     Stores addresses and keys of agents
   """
 
+  alias PalliumCore.Crypto
+
   @storage_path "storage"
 
   def save_keys(agent_name, address, priv_key, pub_key) do

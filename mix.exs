@@ -31,9 +31,9 @@ defmodule Myelin.MixProject do
   defp deps do
     [
       {:neuron, "~> 0.7.0"},
-      {:ed25519, "~> 1.3"},
       {:optimus, "~> 0.1.8"},
-      {:thrift, github: "pinterest/elixir-thrift"}
+      {:pallium_core, path: "../pallium_core"},
+      {:thrift, github: "pinterest/elixir-thrift"},
     ]
   end
 end
