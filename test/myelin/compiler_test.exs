@@ -2,10 +2,12 @@ defmodule Myelin.CompilerTest do
   use ExUnit.Case
 
   alias Myelin.Compiler
+  alias Cmd.Utils
 
   test "compiles" do
     address = "abcdef"
-    {:ok, code} = Compiler.compile_file("test", address)
+    {:ok, agent_src} = Utils.read_agent_source("test")
+    {:ok, code} = Compiler.compile_agent(agent_src, address)
     {:module, agent} = :code.load_binary(String.to_atom(address), 'nofile', code)
 
     assert agent.construct(1) == :ok

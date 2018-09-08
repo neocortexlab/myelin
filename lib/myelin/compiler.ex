@@ -1,36 +1,36 @@
 defmodule Myelin.Compiler do
-  alias Cmd.Utils
 
-  @agent_template :myelin
-                  |> :code.priv_dir()
-                  |> Path.join("agent_module.ex")
-                  |> File.read!()
+  @agent_module :myelin
+                |> :code.priv_dir()
+                |> Path.join("agent_module.ex")
+                |> File.read!()
 
-  def compile_file(agent_name, address) do
-    with {:ok, src} <- Utils.read_agent_source(agent_name) do
-      {:ok, compile(src, address)}
-    end
+  def compile_agent(agent_code, address) do
+    agent_code
+    |> agent_module(address)
+    |> compile(address)
   end
 
-  def compile_template(template_name, address) do
-    with {:ok, tmpl} <- Utils.read_agent_source(template_name) do
-      code =
-        tmpl
-        |> Utils.insert_address(address)
-        |> compile(address)
-
-      {:ok, code}
-    end
-  end
-
-  def compile(agent_source, address) do
-    @agent_template
+  defp agent_module(code, address) do
+    @agent_module
     |> String.replace("{{module}}", address |> String.to_atom() |> inspect())
     |> String.replace("{{address}}", address)
-    |> String.replace("{{code}}", agent_source)
-    |> Code.compile_string()
-    |> cleanup()
-    |> Keyword.get(String.to_atom(address))
+    |> String.replace("{{code}}", code)
+  end
+
+  defp compile(module_source, address) do
+    try do
+      code =
+        module_source
+        |> Code.compile_string()
+        |> cleanup()
+        |> Keyword.get(String.to_atom(address))
+
+      {:ok, code}
+    rescue
+      error ->
+        {:error, error}
+    end
   end
 
   defp cleanup(compiled) do
