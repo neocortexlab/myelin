@@ -29,8 +29,7 @@ defmodule Myelin.Cmd.Build do
 
   def build(agent_name) do
     with {:ok, address} <- get_address(agent_name),
-         {:ok, src} <- read_agent_source(agent_name),
-         {:ok, code} <- Compiler.compile_agent(src, address)
+         {:ok, code} <- Compiler.compile_agent(agent_name, address)
     do
       code_hex = Crypto.to_hex(code)
       content = Enum.join([address, code_hex], "\n")

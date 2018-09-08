@@ -92,6 +92,10 @@ defmodule Myelin do
     end
   end
 
+  defp print_errors(%HTTPoison.Error{} = error) do
+    IO.puts("Connection error: #{inspect error}")
+  end
+
   defp print_errors(response) do
     case response.body["errors"] do
       nil -> :ok
