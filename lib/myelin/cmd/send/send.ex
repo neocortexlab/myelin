@@ -6,7 +6,7 @@ defmodule Myelin.Cmd.Send do
       myelin send AGENT ACTION PROPS
   """
 
-  import Cmd.Utils
+  import Myelin.Utils
 
   def process(args, _flags) do
     print "Sending message to #{args.name}"

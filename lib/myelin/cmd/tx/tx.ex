@@ -6,7 +6,7 @@ defmodule Myelin.Cmd.Tx do
       myelin tx HASH
   """
 
-  import Cmd.Utils
+  import Myelin.Utils
 
   def process(%{hash: hash}, _flags) do
     print "Checking tx #{hash}"

@@ -1,5 +1,5 @@
-defmodule Cmd.Utils do
-  alias Crypto.Storage
+defmodule Myelin.Utils do
+  alias Myelin.Storage
 
   def print(message), do: IO.puts(message)
 

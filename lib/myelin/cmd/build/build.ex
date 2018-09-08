@@ -6,7 +6,7 @@ defmodule Myelin.Cmd.Build do
       myelin build
   """
 
-  import Cmd.Utils
+  import Myelin.Utils
 
   alias PalliumCore.Compiler
   alias PalliumCore.Crypto

@@ -1,4 +1,4 @@
-defmodule Crypto.Storage do
+defmodule Myelin.Storage do
   @moduledoc """
     Stores addresses and keys of agents
   """

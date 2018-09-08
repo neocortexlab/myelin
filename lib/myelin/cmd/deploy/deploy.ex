@@ -6,7 +6,7 @@ defmodule Myelin.Cmd.Deploy do
       myelin deploy
   """
 
-  import Cmd.Utils
+  import Myelin.Utils
 
   def process(_args, _flags), do: deploy_all()
 

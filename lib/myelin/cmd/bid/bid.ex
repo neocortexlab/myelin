@@ -6,7 +6,7 @@ defmodule Myelin.Cmd.Bid do
       myelin bid AGENT
   """
 
-  import Cmd.Utils
+  import Myelin.Utils
 
   alias PalliumCore.Core.Bid
 

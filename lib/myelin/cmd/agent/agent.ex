@@ -3,8 +3,8 @@ defmodule Myelin.Cmd.Agent do
     Handle agent
   """
 
-  import Cmd.Utils
-  alias Crypto.Storage
+  import Myelin.Utils
+  alias Myelin.Storage
   alias PalliumCore.Crypto
 
   @template :myelin

@@ -2,7 +2,7 @@ defmodule Myelin.Cmd.Task do
   @moduledoc """
     Handle task
   """
-  import Cmd.Utils
+  import Myelin.Utils
   @create_dirs ~w(assets src)
 
   def process(args, flags) do
