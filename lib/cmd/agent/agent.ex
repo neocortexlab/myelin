@@ -6,19 +6,10 @@ defmodule Myelin.Cmd.Agent do
   import Cmd.Utils
   alias Crypto.Storage
 
-  @template """
-  construct _params do
-    :ok
-  end
-
-  action :run, params do
-    params
-  end
-
-  task :learn, params do
-    params
-  end
-  """
+  @template :myelin
+            |> :code.priv_dir()
+            |> Path.join("agent_code.ex")
+            |> File.read!()
 
   def process(args, flags) do
     cond do

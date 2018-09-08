@@ -1,21 +1,10 @@
 defmodule Myelin.Compiler do
   alias Cmd.Utils
 
-  @agent_template """
-    defmodule {{module}} do
-      import Myelin.Agent
-      alias Pallium.Env
-
-      @self "{{address}}"
-
-      def start_task(agent, task), do: Env.start_task(@self, agent, task)
-      def get_value(key), do: Env.get_value(@self, key)
-      def set_value(key, value), do: Env.set_value(@self, key, value)
-      def set_state(state), do: Env.set_state(@self, state)
-
-      {{code}}
-    end
-  """
+  @agent_template :myelin
+                  |> :code.priv_dir()
+                  |> Path.join("agent_module.ex")
+                  |> File.read!()
 
   def compile_file(agent_name, address) do
     with {:ok, src} <- Utils.read_agent_source(agent_name) do
@@ -29,6 +18,7 @@ defmodule Myelin.Compiler do
         tmpl
         |> Utils.insert_address(address)
         |> compile(address)
+
       {:ok, code}
     end
   end
@@ -52,6 +42,7 @@ defmodule Myelin.Compiler do
   end
 
   defp purge_modules([]), do: :ok
+
   defp purge_modules([mod | rest]) do
     :code.purge(mod)
     :code.delete(mod)
