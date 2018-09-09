@@ -32,7 +32,7 @@ defmodule Myelin.MixProject do
     [
       {:neuron, "~> 0.7.0"},
       {:optimus, "~> 0.1.8"},
-      {:pallium_core, path: "../pallium_core"},
+      {:pallium_core, github: "neocortexlab/pallium-core"},
       {:thrift, github: "pinterest/elixir-thrift"},
     ]
   end
