@@ -69,7 +69,7 @@ defmodule Myelin do
     response =
       request("""
         Bid {
-          bid(from: "#{address}", bid: #{bid_rlp}) {
+          bid(from: "#{address}", bid: "#{bid_rlp}") {
             hash
             height
             data

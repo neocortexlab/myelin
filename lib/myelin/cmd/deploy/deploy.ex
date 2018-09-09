@@ -8,6 +8,8 @@ defmodule Myelin.Cmd.Deploy do
 
   import Myelin.Utils
 
+  alias PalliumCore.Crypto
+
   def process(_args, _flags), do: deploy_all()
 
   defp deploy_all do
@@ -24,7 +26,8 @@ defmodule Myelin.Cmd.Deploy do
   end
 
   defp deploy(file) do
-    [address, code] = load(file)
+    [address, code_hex] = load(file)
+    code = Crypto.from_hex(code_hex)
 
     Myelin.init()
     response = Myelin.deploy_agent(address, code, deploy_params())
