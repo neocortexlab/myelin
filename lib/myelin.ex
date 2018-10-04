@@ -6,7 +6,9 @@ defmodule Myelin do
   alias PalliumCore.Core.{Agent,Bid,Message}
   alias PalliumCore.Crypto
 
-  def init(), do: Neuron.Config.set(url: "http://localhost:8080/api")
+  def init(), do: Neuron.Config.set(url: "http://localhost:#{port()}/api")
+
+  defp port, do: System.get_env("PORT") || "8080"
 
   def deploy_agent(address, code, %{} = params) do
     rlp = %Agent{code: code} |> Agent.encode(:hex)
