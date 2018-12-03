@@ -26,8 +26,13 @@ defmodule Myelin.Cmd.Deploy do
   end
 
   defp deploy(file) do
-    [address, code_hex] = load(file)
-    code = Crypto.from_hex(code_hex)
+    [[address, _] | _] = code =
+      build_path()
+      |> Path.join(file)
+      |> File.read!()
+      |> String.split("\n")
+      |> Enum.chunk_every(2)
+      |> Enum.map(fn [address, hex] -> [address, Crypto.from_hex(hex)] end)
 
     Myelin.init()
     response = Myelin.deploy_agent(address, code, deploy_params())
@@ -35,13 +40,6 @@ defmodule Myelin.Cmd.Deploy do
     print "The #{file} Agent was successfully deployed at #{address}"
     print "Transaction: #{inspect response}"
     print "Decoded data: #{inspect Base.decode64(response["data"])}"
-  end
-
-  defp load(file) do
-    build_path()
-    |> Path.join(file)
-    |> File.read!()
-    |> String.split("\n", parts: 2)
   end
 
   defp deploy_params, do: %{foo: "bar", model: "hash"}

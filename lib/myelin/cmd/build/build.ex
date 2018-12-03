@@ -31,10 +31,14 @@ defmodule Myelin.Cmd.Build do
     with {:ok, address} <- get_address(agent_name),
          {:ok, code} <- Compiler.compile_agent(agent_name, address)
     do
-      code_hex = Crypto.to_hex(code)
-      content = Enum.join([address, code_hex], "\n")
-      File.mkdir_p!(build_path())
-      File.write!(Path.join(build_path(), agent_name), content)
+      code_hex =
+        code
+        |> Enum.map(fn [atom, bytes] -> [atom, Crypto.to_hex(bytes)] end)
+        |> List.flatten()
+        |> Enum.join("\n")
+      path = build_path()
+      File.mkdir_p!(path)
+      File.write!(Path.join(path, agent_name), code_hex)
       print "Building agent #{agent_name} successfully completed"
     else
       {:error, reason} ->
