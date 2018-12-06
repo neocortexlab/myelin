@@ -82,6 +82,37 @@ defmodule Myelin do
     response.body
   end
 
+  def start_pipeline(agents_str) do
+    response =
+      request("""
+        Pipeline {
+          start_pipeline(agents: "#{agents_str}") {
+            hash
+            height
+            data
+          }
+        }
+      """)
+
+    response.body["data"]["start_pipeline"]["data"]
+    |> Base.decode64!()
+  end
+
+  def run_pipeline(pipeline_id, input) do
+    response =
+      request("""
+        Pipeline {
+          run_pipeline(pipeline_id: "#{pipeline_id}", input: "#{input}") {
+            hash
+            height
+            data
+          }
+        }
+        """)
+
+    :ok
+  end
+
   defp request(request) do
     case Neuron.mutation(request) do
       {:ok, response} ->

@@ -13,14 +13,16 @@ defmodule Myelin.CmdSpec do
   """
   #import Cmd.Utils
   @submodule_specs %{
-    :new    => Myelin.Cmd.New,
-    :build  => Myelin.Cmd.Build,
-    :agent  => Myelin.Cmd.Agent,
-    :task   => Myelin.Cmd.Task,
-    :delpoy => Myelin.Cmd.Deploy,
-    :send   => Myelin.Cmd.Send,
-    :tx     => Myelin.Cmd.Tx,
-    :bid    => Myelin.Cmd.Bid,
+    :new          => Myelin.Cmd.New,
+    :build        => Myelin.Cmd.Build,
+    :agent        => Myelin.Cmd.Agent,
+    :task         => Myelin.Cmd.Task,
+    :delpoy       => Myelin.Cmd.Deploy,
+    :send         => Myelin.Cmd.Send,
+    :tx           => Myelin.Cmd.Tx,
+    :bid          => Myelin.Cmd.Bid,
+    :pipeline     => Myelin.Cmd.Pipeline,
+    :run_pipeline => Myelin.Cmd.Runpipeline,
   }
 
   def main([]), do: parse(["--help"])
