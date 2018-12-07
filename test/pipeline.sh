@@ -9,7 +9,7 @@ create_agent () {
     end
 
     run log do
-      log <> "\\n Running $1 agent at #{Node.self}"
+      log <> " - Running $1 agent at #{Node.self}"
     end
 EOM
 
